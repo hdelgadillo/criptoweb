@@ -16,11 +16,32 @@ if ($zip->open($filename, ZipArchive::CREATE)!==TRUE) {
 $zip->addFile("private" );
 $zip->addFile("public.pub");
 
+
 $fh = fopen('public.pub','r');
-while ($line = fgets($fh)) {
+$file = file_get_contents('./public.pub');
   // <... Do your work with the line ...>
-  echo($line(0));
+  $servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "web";
+
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+// Check connection
+if (!$conn) {
+  die("Connection failed: " . mysqli_connect_error());
 }
+
+$sql = "INSERT INTO usuarios (usuario, public)
+VALUES ('$usuario', '$file')";
+
+if (mysqli_query($conn, $sql)) {
+  echo "New record created successfully";
+} else {
+  echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+}
+
+mysqli_close($conn);
+
 fclose($fh);
 
 
@@ -35,8 +56,8 @@ fclose($fh);
 
 <?php
 
-#$fichero = 'keys.zip';
-/*
+$fichero = 'keys.zip';
+
 if (file_exists($fichero)) {
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
@@ -48,7 +69,7 @@ if (file_exists($fichero)) {
     readfile($fichero);
     exit;
 }
-*/
+
 
 
 ?>
